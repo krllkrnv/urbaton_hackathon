@@ -1,21 +1,19 @@
 <template>
   <div class="background-styling">
-    <v-card id="map" class="map rounded-xl"/>
     <v-card variant="text">
-          <v-card-title class="text-center">
+          <v-card-title class="text-center mt-6">
               Добро пожаловать в Информационный портал населения "Навигатор чистоты"
           </v-card-title>
       </v-card>
       <v-responsive
-              class="mx-auto mt-12"
+              class="mx-auto mt-6"
               max-width="750"
       min-width="350">
           <v-autocomplete
                   v-model="searchValue"
-                  @update:modelValue="console.log(searchValue)"
+                  @update:modelValue="pushCityAndRoute(this.searchValue)"
                   :items="items"
                   auto-select-first
-                  class="flex-full-width pa-1 ma-1"
                   density="comfortable"
                   menu-icon=""
                   placeholder="Укажите ваш город"
@@ -45,53 +43,23 @@
 </template>
 
 <script>
-
-function init(){
-  let map = new ymaps.Map('map', {
-center: [60.00381161410379,30.362975130188094],
-    zoom: 12
-  })
-  let placemark = new ymaps.Placemark([59.990073703305846,30.33182238821428], {
-    balloonContent: `
-    <v-card>
-    Кто прочитал тот прочитал
-</v-card>
-    `
-  }, {
-    //iconLayout: 'default#image',
-    //iconImageHref: 'https://cdn.iconscout.com/icon/free/png-512/free-attachment-66-438892.png?f=webp&w=256',
-    //iconImageSize: [20, 20],
-    //iconImageOffset: [0, 0]
-  })
-
-
-  // Для того, чтобы элемент не рисовать, нужно убрать комментарии. Как я понял, Ya запрещает это делать.
- // map.controls.remove('geolocationControl'); // удаляем геолокацию
- // map.controls.remove('searchControl'); // удаляем поиск
- // map.controls.remove('trafficControl'); // удаляем контроль трафика
- // map.controls.remove('typeSelector'); // удаляем тип
- // map.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
- // map.controls.remove('zoomControl'); // удаляем контрол зуммирования
- // map.controls.remove('rulerControl'); // удаляем контрол правил
- // map.behaviors.disable(['scrollZoom']); // отключаем скролл карты (опционально)
-
-  map.geoObjects.add(placemark);
- // placemark.balloon.open(); // открыть по умолчанию балун
-}
-ymaps.ready(init);
-
+import cityPage from "./cityPage.vue";
 export default {
+  components: {
+    cityPage
+  },
 data(){
   return{
     colData: [{
-      name: 'Выберите свой город',
-      body: 'Выберите ваш город, чтобы просмотреть новости и заявки вашего города',
+      name: 'Города',
+      body: 'Выберите в списке желаемый город',
       icon: 'mdi: mdi-city'
-    }, {name: 'Test Name',
-      body: 'Test Body',
-    icon: 'mdi: mdi-city'}, {name: 'Test Name',
-      body: 'Test Body',
-      icon: 'mdi: mdi-city'},
+    }, {name: 'Новости',
+      body: 'Просматривайте новости вашего города',
+    icon: 'mdi: mdi-newspaper-variant-multiple'},
+      {name: 'Карта',
+      body: 'Просматривайте карту вашего города',
+      icon: 'mdi: mdi-map-marker'},
       {name: 'Test Name',
         body: 'Test Body',
         icon: 'mdi: mdi-city'},
@@ -103,48 +71,154 @@ data(){
         icon: 'mdi: mdi-city'}],
       dialog: false,
       items: [
-          {
-              title: 'Москва',
-          },
-          {
-              title: 'Санкт-Петербург',
-          },
-          {
-              title: 'Краснодар',
-          },
-          {
-              title: 'Нижний Новгород',
-          },
-          {
-              title: 'Абакан',
-          },{
-              title: 'Москва',
-          },
-          {
-              title: 'Санкт-Петербург',
-          },
-          {
-              title: 'Краснодар',
-          },
-          {
-              title: 'Нижний Новгород',
-          },
-          {
-              title: 'Абакан',
-          },
+        {
+          title: "Абакан",
+          id: 0
+        },
+        {
+          title: "Анапа",
+          id: 1
+        },
+        {
+          title: "Архангельск",
+          id: 2
+        },
+        {
+          title: "Астрахань",
+          id: 3
+        },
+        {
+          title: "Барнаул",
+          id: 4
+        },
+        {
+          title: "Белгород",
+          id: 5
+        },
+        {
+          title: "Благовещенск",
+          id: 6
+        },
+        {
+          title: "Брянск",
+          id: 7
+        },
+        {
+          title: "Владивосток",
+          id: 8
+        },
+        {
+          title: "Владикавказ",
+          id: 9
+        },
+        {
+          title: "Владимир",
+          id: 10
+        },
+        {
+          title: "Волгоград",
+          id: 11
+        },
+        {
+          title: "Вологда",
+          id: 12
+        },
+        {
+          title: "Воронеж",
+          id: 13
+        },
+        {
+          title: "Грозный",
+          id: 14
+        },
+        {
+          title: "Екатеринбург",
+          id: 15
+        },
+        {
+          title: "Иваново",
+          id: 16
+        },
+        {
+          title: "Ижевск",
+          id: 17
+        },
+        {
+          title: "Иркутск",
+          id: 18
+        },
+        {
+          title: "Йошкар-Ола",
+          id: 19
+        },
+        {
+          title: "Казань",
+          id: 20
+        },
+        {
+          title: "Калининград",
+          id: 21
+        },
+        {
+          title: "Калуга",
+          id: 22
+        },
+        {
+          title: "Кемерово",
+          id: 23
+        },
+        {
+          title: "Киров",
+          id: 24
+        },
+        {
+          title: "Кострома",
+          id: 25
+        },
+        {
+          title: "Краснодар",
+          id: 26
+        },
+        {
+          title: "Красноярск",
+          id: 27
+        },
+        {
+          title: "Курган",
+          id: 28
+        },
+        {
+          title: "Курск",
+          id: 29
+        },
+        {
+          title: "Москва",
+          id: 30
+        },
+        {
+          title: 'Санкт-Петербург',
+          id: 31
+        }
       ],
       searchValue: null,
+    }
+  },
+  methods: {
+    pushCityAndRoute(cityName){
+      this.$store.commit('SET_CITY_NAME', cityName);
+      this.$router.push({
+        name: 'cityPage',
+        params: {
+          cityId: this.items.find(item => item.title === this.searchValue).id
+        }
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-.map{
-  width: 100%;
-  height: 500px;
-  background-color: #535bf2;
-}
+
 .v-card-element{
   transition: transform 0.45s ease-in-out;
 }
@@ -168,7 +242,7 @@ data(){
 
 }
 .background-styling{
-    background-image: url("city_img.jpg");
+    background-image: url("/city_img.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

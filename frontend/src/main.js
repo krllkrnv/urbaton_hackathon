@@ -9,7 +9,7 @@ import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import './style.css'
-
+import router from "./router/router.js";
 
 
 
@@ -22,4 +22,5 @@ const vuetify = createVuetify({
 createApp(App)
     .use(store)
     .use(vuetify)
+    .use(router)
     .mount('#app')
